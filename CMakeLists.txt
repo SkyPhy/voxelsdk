@@ -1,4 +1,4 @@
-cmake_minimum_required (VERSION 2.8.13)
+cmake_minimum_required (VERSION 3.15)
 project (Voxel)
 
 set(VOXEL_MAJOR_VERSION 0)
@@ -11,6 +11,8 @@ set(VOXEL_CONF_VERSION 1)
 ### Do not export any symbol by default
 set(CMAKE_CXX_VISIBILITY_PRESET hidden)
 set(CMAKE_VISIBILITY_INLINES_HIDDEN 1)
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 include(GenerateExportHeader)
 
 
@@ -22,7 +24,7 @@ set(ARCH ${CMAKE_SYSTEM_PROCESSOR})
 
 if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
   SET(LINUX 1)
-  add_definitions(-msse2 -pthread -std=c++11 -fPIC -ffast-math)
+  add_definitions(-msse2 -pthread -fPIC -ffast-math)
   ADD_DEFINITIONS(-DLINUX)  
 
   set(COMMON_LIBS ${COMMON_LIBS} usb-1.0 dl)
@@ -137,6 +139,12 @@ set(CPACK_COMPONENTS_GROUPING ALL_COMPONENTS_IN_ONE)
 
 add_subdirectory(Voxel)
 add_subdirectory(VoxelPCL)
+if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/VoxelOpen3D/CMakeLists.txt")
+  add_subdirectory(VoxelOpen3D)
+endif()
+if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/ros2_voxelsdk/CMakeLists.txt")
+  add_subdirectory(ros2_voxelsdk)
+endif()
 add_subdirectory(TI3DToF)
 add_subdirectory(Test)
 add_subdirectory(App)
